@@ -171,6 +171,12 @@ runs:
         echo "::group::Set Tags"
         echo "Event payload: ${{ toJson(github.event_name) }}"
 
+        # Custom build-arg
+          CUSTOM_BUILD_ARGS="\
+        --build-arg ARG1=value1 \
+        --build-arg ARG2=value2 \
+        --build-arg ARG3=value3"
+
         # Get Tags
         TAGS="${{ inputs.tags }}"
         if [[ -z "$TAGS" ]]; then
@@ -206,6 +212,7 @@ runs:
           --build-arg BUILDKIT_INLINE_CACHE=1 \
           --build-arg BUILD_DATE="${BUILD_DATE}" \
           --build-arg GITHUB_SHA="${GITHUB_SHA}" \
+          $CUSTOM_BUILD_ARGS \
           $DOCKER_TAGS \
           --label "org.label-schema.build-date=${BUILD_DATE}" \
           --label "org.label-schema.vcs-url=${GITHUB_URL}" \
